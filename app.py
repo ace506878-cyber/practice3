@@ -111,4 +111,37 @@ with left_col:
         
     fig.add_shape(type="rect", x0=1, y0=1, x1=9, y1=4, fillcolor=status_color, line_color="black")
     fig.add_annotation(x=5, y=2.5, text=f"{station}역 [{status}]", showarrow=False, font=dict(size=20))
-    fig.update_layout(
+    fig.update_layout(xaxis=dict(visible=False), yaxis=dict(visible=False), height=300, margin=dict(l=20, r=20, t=20, b=20))
+    st.plotly_chart(fig, use_container_width=True)
+
+with right_col:
+    st.subheader("📢 시스템 권고")
+    if congestion > 30000:
+        st.error("🚨 인파 밀집 주의! 우회 동선을 안내하세요.")
+    elif congestion > 10000:
+        st.warning("⚠️ 승하차 동선을 분리하여 안내 중입니다.")
+    else:
+        st.success("✅ 현재 역사 내 이동이 원활합니다.")
+
+# 하단 시간대별 트렌드
+st.subheader(f"📈 {station}역 시간대별 유동인구 추이")
+hours = range(4, 24)
+trend_data = []
+for h in hours:
+    trend_data.append({
+        "시간": f"{h:02d}시",
+        "승차": get_val(h, "승차인원"),
+        "하차": get_val(h, "하차인원")
+    })
+trend_df = pd.DataFrame(trend_data)
+
+fig_line = px.line(trend_df, x="시간", y=["승차", "하차"], markers=True, template="plotly_white")
+st.plotly_chart(fig_line, use_container_width=True)
+
+# TOP 10 
+st.markdown("---")
+st.subheader("🚨 전체 역 혼잡도 TOP 10 (누적)")
+df_top = df.groupby('역명').sum(numeric_only=True)
+df_top['총합'] = df_top.filter(like='승차').sum(axis=1) + df_top.filter(like='하차').sum(axis=1)
+top10 = df_top.sort_values('총합', ascending=False).head(10)
+st.bar_chart(top10['총합'])
