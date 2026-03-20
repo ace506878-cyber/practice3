@@ -7,7 +7,7 @@ st.set_page_config(page_title="지하역 동선 최적화 시뮬레이터", layo
 
 @st.cache_data
 def load_data():
-    file_path = 'data/subway_all.csv'
+    file_path = 'subway_all.csv'
 
     try:
         df = pd.read_csv(file_path, encoding='utf-8')
