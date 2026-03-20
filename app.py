@@ -3,11 +3,11 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="강남역 동선 최적화 시뮬레이터", layout="wide")
+st.set_page_config(page_title="지하역 동선 최적화 시뮬레이터", layout="wide")
 
 @st.cache_data
 def load_data():
-    file_path = 'data/gangnam.csv'
+    file_path = 'subway_all.csv'
 
     try:
         df = pd.read_csv(file_path, encoding='utf-8')
@@ -35,7 +35,8 @@ if filtered.empty:
     st.error("선택한 역 데이터가 없습니다.")
     st.stop()
 
-data = filtered.iloc[0]
+# 🔥 여러 행이면 합계 처리
+data = filtered.sum(numeric_only=True)
 
 selected_hour = st.sidebar.slider("시뮬레이션 시간대 (시)", 4, 23, 8)
 
