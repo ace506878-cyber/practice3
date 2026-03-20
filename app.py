@@ -17,7 +17,7 @@ def load_data():
 
     return df  # ❗ 전체 df 반환으로 변경
 
-try:
+
     df = load_data()
    
     st.title("🚉 지하철 역 혼잡도 분석 및 동선 최적화 시스템")
