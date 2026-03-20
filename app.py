@@ -19,7 +19,7 @@ def load_data():
 
 # 🔥 여기부터 함수 밖
 df = load_data()
-
+st.write(df.columns)
 st.title("🚉 지하철 역 혼잡도 분석 및 동선 최적화 시스템")
 st.info("데이터 분석 결과에 따른 시간대별 최적 동선 가이드를 제공합니다.")
 
